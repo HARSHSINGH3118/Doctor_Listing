@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CurrencyRupeeIcon, BriefcaseIcon } from "@heroicons/react/24/outline";
 
 function DoctorCard({ doctor }) {
   const [showMore, setShowMore] = useState(false);
@@ -16,61 +17,77 @@ function DoctorCard({ doctor }) {
 
   return (
     <div
-      className="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full overflow-hidden"
+      className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-5 flex flex-col justify-between text-center border border-gray-100 min-h-[450px]"
       data-testid="doctor-card"
     >
-      <div className="p-4 flex flex-col gap-4 h-full">
-        {/* Profile section */}
-        <div className="flex items-start gap-4">
-          <img
-            src={doctor.photo}
-            alt={doctor.name}
-            className="w-20 h-20 rounded-full object-cover border-2 border-blue-500 shadow-sm"
-          />
-          <div className="flex-1">
-            <h2
-              className="text-lg font-semibold text-gray-900"
-              data-testid="doctor-name"
+      {/* Top Section */}
+      <div className="flex flex-col items-center">
+        <img
+          src={doctor.photo}
+          alt={doctor.name}
+          className="w-24 h-24 rounded-full object-cover border-4 border-blue-100 shadow-md mb-3"
+        />
+
+        <h2
+          className="text-lg font-semibold text-gray-800"
+          data-testid="doctor-name"
+        >
+          {doctor.name}
+        </h2>
+        <p
+          className="text-sm text-gray-500 italic mb-2"
+          data-testid="doctor-specialty"
+        >
+          {doctor.specialties?.join(", ")}
+        </p>
+
+        {/* Badges */}
+        <div className="flex flex-wrap gap-2 justify-center mb-3">
+          {doctor.video_consult && (
+            <span
+              className="text-xs px-3 py-1 rounded-full bg-yellow-50 text-yellow-700 font-semibold border border-yellow-200 transition-transform duration-200 hover:scale-105"
+              title="Doctor offers video consultation"
             >
-              {doctor.name}
-            </h2>
-
-            {/* Badges below name, aligned left */}
-            <div className="flex gap-2 mt-1 flex-wrap">
-              {doctor.video_consult && (
-                <span className="text-xs px-3 py-1 rounded-full bg-green-100 text-green-800 font-semibold border border-green-300 shadow-sm">
-                  Video Consult
-                </span>
-              )}
-              {doctor.in_clinic && (
-                <span className="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-800 font-semibold border border-blue-300 shadow-sm">
-                  In Clinic
-                </span>
-              )}
-            </div>
-
-            {/* Specialty + Experience + Fee */}
-            <div className="mt-2 text-sm text-gray-800">
-              <p data-testid="doctor-specialty">
-                {doctor.specialties?.join(", ")}
-              </p>
-              <p data-testid="doctor-experience" className="mt-1">
-                🧑‍⚕️ {doctor.experience} years experience
-              </p>
-              <p data-testid="doctor-fee">💰 Fee: ₹{doctor.fee}</p>
-            </div>
-          </div>
+              Video
+            </span>
+          )}
+          {doctor.in_clinic && (
+            <span
+              className="text-xs px-3 py-1 rounded-full bg-green-50 text-green-700 font-semibold border border-green-200 transition-transform duration-200 hover:scale-105"
+              title="Doctor is available at clinic"
+            >
+              Clinic
+            </span>
+          )}
         </div>
 
-        {/* Description */}
-        <div className="text-sm text-gray-800 leading-relaxed flex-grow min-h-[60px]">
+        {/* Experience & Fee */}
+        <div className="flex justify-center gap-4 text-sm font-medium text-gray-700 mb-3 items-center">
+          <p
+            data-testid="doctor-experience"
+            className="flex items-center gap-1"
+          >
+            <BriefcaseIcon className="w-4 h-4 text-gray-500" />
+            {doctor.experience} yrs
+          </p>
+          <p
+            data-testid="doctor-fee"
+            className="flex items-center gap-1 text-blue-700 font-semibold"
+          >
+            <CurrencyRupeeIcon className="w-4 h-4 text-blue-700" />
+            {doctor.fee}
+          </p>
+        </div>
+
+        {/* Introduction (Flexible height part) */}
+        <div className="text-sm text-gray-700 min-h-[60px]">
           {doctor.doctor_introduction ? (
             <>
               {showMore ? doctor.doctor_introduction : shortIntro}
               {doctor.doctor_introduction.length > 200 && (
                 <button
                   onClick={() => setShowMore(!showMore)}
-                  className="ml-1 text-blue-600 font-medium underline hover:text-blue-800"
+                  className="ml-1 text-blue-500 font-medium underline hover:text-blue-700"
                 >
                   {showMore ? "Show less" : "Read more"}
                 </button>
@@ -82,24 +99,15 @@ function DoctorCard({ doctor }) {
             </span>
           )}
         </div>
+      </div>
 
-        {/* Footer */}
-        <div className="pt-3 border-t text-xs text-gray-500 leading-tight space-y-1">
-          <p>🏢 {clinicLine}</p>
+      {/* Spacer to push footer down */}
+      <div className="flex-grow" />
 
-          {doctor.clinic?.address?.location && (
-            <a
-              href={`https://www.google.com/maps/search/?api=1&query=${doctor.clinic.address.location}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block text-blue-600 hover:underline font-medium"
-            >
-              📍 View on Google Maps
-            </a>
-          )}
-
-          <p>🗣️ {doctor.languages?.join(", ")}</p>
-        </div>
+      {/* Footer (Always bottom aligned) */}
+      <div className="pt-3 border-t mt-4 text-xs text-gray-500 leading-tight space-y-1">
+        <p>🏢 {clinicLine}</p>
+        <p>🗣️ {doctor.languages?.join(", ")}</p>
       </div>
     </div>
   );
