@@ -66,14 +66,4 @@ src/
 ├── App.jsx               # Main app layout
 └── index.js              # Entry point
 ```
- ## Deployment
-Easily deployable on:
-
-Vercel: vercel deploy
-
-Netlify: Drop dist/ folder after build
-
-GitHub Pages (with Vite adapter)
-```
-npm run build
-```
+ 
