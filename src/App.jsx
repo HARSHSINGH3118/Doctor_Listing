@@ -11,6 +11,7 @@ function App() {
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [availableSpecialties, setAvailableSpecialties] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
   const [consultType, setConsultType] = useState(
@@ -32,7 +33,15 @@ function App() {
           experience: parseInt(doc.experience.replace(/[^\d]/g, "")),
           mode: getMode(doc),
         }));
+
+        // 🆕 Extract actual specialties present in doctors
+        const allSpecs = new Set();
+        formatted.forEach((doc) => {
+          doc.specialties.forEach((spec) => allSpecs.add(spec));
+        });
+
         setDoctors(formatted);
+        setAvailableSpecialties([...allSpecs].sort());
       });
   }, []);
 
@@ -85,6 +94,7 @@ function App() {
             setSpecialties={setSpecialties}
             sortBy={sortBy}
             setSortBy={setSortBy}
+            availableSpecialties={availableSpecialties} // 🆕
           />
 
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

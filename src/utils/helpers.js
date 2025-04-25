@@ -19,7 +19,11 @@ export function applyFiltersAndSort(
 
   if (specialties.length > 0) {
     result = result.filter((doc) =>
-      specialties.every((sp) => doc.specialties.includes(sp))
+      specialties.every((sp) =>
+        doc.specialties.some((actual) =>
+          actual.toLowerCase().includes(sp.toLowerCase())
+        )
+      )
     );
   }
 

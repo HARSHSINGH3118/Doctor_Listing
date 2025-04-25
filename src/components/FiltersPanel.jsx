@@ -32,6 +32,7 @@ function FiltersPanel({
   setSpecialties,
   sortBy,
   setSortBy,
+  availableSpecialties = [], // ✅ new optional prop
 }) {
   const toggleSpecialty = (specialty) => {
     setSpecialties((prev) =>
@@ -40,6 +41,13 @@ function FiltersPanel({
         : [...prev, specialty]
     );
   };
+
+  // ✅ Filter specialties to show only ones with matching doctors
+  const filteredSpecialtiesList = specialtiesList.filter((spec) =>
+    availableSpecialties.some((available) =>
+      available.toLowerCase().includes(spec.toLowerCase())
+    )
+  );
 
   return (
     <div className="w-full md:w-1/4 p-4 border rounded shadow-sm bg-white">
@@ -76,7 +84,7 @@ function FiltersPanel({
         Speciality
       </h3>
       <div className="max-h-56 overflow-y-auto pr-1 text-sm">
-        {specialtiesList.map((item, idx) => (
+        {filteredSpecialtiesList.map((item, idx) => (
           <label key={idx} className="block">
             <input
               type="checkbox"
