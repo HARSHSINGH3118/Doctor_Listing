@@ -1,57 +1,48 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 function Autocomplete({ doctors, searchTerm, setSearchTerm }) {
   const [suggestions, setSuggestions] = useState([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const inputRef = useRef(null);
 
   useEffect(() => {
-    if (searchTerm.trim() === "") {
+    if (!searchTerm.trim()) {
       setSuggestions([]);
       return;
     }
+
     const matches = doctors
       .filter((doc) =>
         doc.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
       .slice(0, 3);
+
     setSuggestions(matches);
-    setShowSuggestions(true);
   }, [searchTerm, doctors]);
 
   const handleSelect = (name) => {
     setSearchTerm(name);
     setSuggestions([]);
-    setShowSuggestions(false);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setShowSuggestions(false);
   };
 
   return (
-    <div className="relative max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit}>
-        <input
-          data-testid="autocomplete-input"
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="🔍 Search doctor by name..."
-          ref={inputRef}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
-        />
-      </form>
+    <div className="relative w-full max-w-lg mx-auto mb-6">
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="🔍 Search doctor by name..."
+        className="w-full px-4 py-2 pl-10 rounded-full border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+        data-testid="autocomplete-input"
+      />
 
-      {showSuggestions && suggestions.length > 0 && (
-        <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full shadow-md">
+      {/* Suggestion Dropdown */}
+      {suggestions.length > 0 && (
+        <ul className="absolute top-full left-0 right-0 bg-white mt-1 rounded-md shadow-lg border border-gray-200 z-50">
           {suggestions.map((doc, index) => (
             <li
               key={index}
-              data-testid="suggestion-item"
               onClick={() => handleSelect(doc.name)}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              className="px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 cursor-pointer border-b last:border-b-0"
+              data-testid="suggestion-item"
             >
               {doc.name}
             </li>
