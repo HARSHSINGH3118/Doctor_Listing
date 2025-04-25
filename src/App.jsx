@@ -1,4 +1,3 @@
-// src/App.jsx
 import { useEffect, useState } from "react";
 import Autocomplete from "./components/Autocomplete";
 import FiltersPanel from "./components/FiltersPanel";
@@ -13,7 +12,6 @@ function App() {
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // State for filters
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
   const [consultType, setConsultType] = useState(
     searchParams.get("consult") || ""
@@ -23,14 +21,28 @@ function App() {
   );
   const [sortBy, setSortBy] = useState(searchParams.get("sort") || "");
 
-  // Fetch doctor data once
   useEffect(() => {
     fetch(API_URL)
       .then((res) => res.json())
-      .then((data) => setDoctors(data));
+      .then((data) => {
+        const formatted = data.map((doc) => ({
+          ...doc,
+          specialties: doc.specialities?.map((s) => s.name) || [],
+          fee: parseInt(doc.fees.replace(/[^\d]/g, "")),
+          experience: parseInt(doc.experience.replace(/[^\d]/g, "")),
+          mode: getMode(doc),
+        }));
+        setDoctors(formatted);
+      });
   }, []);
 
-  // Apply filters and sort whenever any dependency changes
+  const getMode = (doc) => {
+    if (doc.video_consult && doc.in_clinic) return "both";
+    if (doc.video_consult) return "Video Consult";
+    if (doc.in_clinic) return "In Clinic";
+    return "";
+  };
+
   useEffect(() => {
     const result = applyFiltersAndSort(
       doctors,
@@ -41,7 +53,6 @@ function App() {
     );
     setFilteredDoctors(result);
 
-    // Update query params in URL
     const params = {};
     if (searchTerm) params.q = searchTerm;
     if (consultType) params.consult = consultType;
@@ -53,7 +64,7 @@ function App() {
 
   return (
     <div className="max-w-7xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Doctor Listing</h1>
+      <h1 className="text-3xl font-bold mb-4">Doctor Listing</h1>
       <Autocomplete
         doctors={doctors}
         searchTerm={searchTerm}

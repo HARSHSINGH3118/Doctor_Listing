@@ -1,4 +1,3 @@
-// src/components/Autocomplete.jsx
 import { useEffect, useRef, useState } from "react";
 
 function Autocomplete({ doctors, searchTerm, setSearchTerm }) {
@@ -11,7 +10,6 @@ function Autocomplete({ doctors, searchTerm, setSearchTerm }) {
       setSuggestions([]);
       return;
     }
-
     const matches = doctors
       .filter((doc) =>
         doc.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -45,7 +43,6 @@ function Autocomplete({ doctors, searchTerm, setSearchTerm }) {
           className="w-full px-4 py-2 border rounded shadow-sm"
         />
       </form>
-
       {showSuggestions && suggestions.length > 0 && (
         <ul className="absolute z-10 bg-white border rounded mt-1 w-full shadow-lg">
           {suggestions.map((doc, index) => (
