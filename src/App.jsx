@@ -63,26 +63,35 @@ function App() {
   }, [doctors, searchTerm, consultType, specialties, sortBy]);
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Doctor Listing</h1>
-      <Autocomplete
-        doctors={doctors}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
-      <div className="flex flex-col md:flex-row gap-6 mt-4">
-        <FiltersPanel
-          consultType={consultType}
-          setConsultType={setConsultType}
-          specialties={specialties}
-          setSpecialties={setSpecialties}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <header className="sticky top-0 bg-white shadow-md z-50 py-4 mb-6">
+          <h1 className="text-3xl font-extrabold text-center text-blue-800">
+            Doctor Listing Portal
+          </h1>
+        </header>
+
+        <Autocomplete
+          doctors={doctors}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
         />
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredDoctors.map((doctor, idx) => (
-            <DoctorCard key={idx} doctor={doctor} />
-          ))}
+
+        <div className="flex flex-col md:flex-row gap-6 mt-6">
+          <FiltersPanel
+            consultType={consultType}
+            setConsultType={setConsultType}
+            specialties={specialties}
+            setSpecialties={setSpecialties}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+          />
+
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredDoctors.map((doctor, idx) => (
+              <DoctorCard key={idx} doctor={doctor} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

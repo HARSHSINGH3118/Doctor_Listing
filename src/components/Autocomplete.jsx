@@ -31,20 +31,21 @@ function Autocomplete({ doctors, searchTerm, setSearchTerm }) {
   };
 
   return (
-    <div className="relative max-w-xl">
+    <div className="relative max-w-2xl mx-auto">
       <form onSubmit={handleSubmit}>
         <input
           data-testid="autocomplete-input"
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search doctor by name..."
+          placeholder="🔍 Search doctor by name..."
           ref={inputRef}
-          className="w-full px-4 py-2 border rounded shadow-sm"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
         />
       </form>
+
       {showSuggestions && suggestions.length > 0 && (
-        <ul className="absolute z-10 bg-white border rounded mt-1 w-full shadow-lg">
+        <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full shadow-md">
           {suggestions.map((doc, index) => (
             <li
               key={index}
